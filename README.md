@@ -39,6 +39,7 @@ Cтруктура проекта
     
     "dektrium/yii2-user"
     "dektrium/yii2-rbac" | composer require dektrium/yii2-rbac:1.0.0-alpha@dev
+    "dmstr/yii2-adminlte-asset" |composer require dmstr/yii2-adminlte-asset "^2.1"
 
 
 
