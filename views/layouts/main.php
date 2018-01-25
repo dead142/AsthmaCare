@@ -1,73 +1,56 @@
 <?php
 
 /* @var $this \yii\web\View */
+
 /* @var $content string */
 
+use app\assets\AppAsset;
 use app\widgets\Alert;
 use yii\helpers\Html;
-use yii\bootstrap\Nav;
-use yii\bootstrap\NavBar;
 use yii\widgets\Breadcrumbs;
-use app\assets\AppAsset;
 
 AppAsset::register($this);
 ?>
+
+<?
+if (\Yii::$app->user->identity){
+    $userIdentity =  \Yii::$app->user->identity;
+}
+ ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
 <html lang="<?= Yii::$app->language ?>">
 <head>
     <meta charset="<?= Yii::$app->charset ?>">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
     <?= Html::csrfMetaTags() ?>
     <title><?= Html::encode($this->title) ?></title>
     <?php $this->head() ?>
 </head>
-<body>
+<body class="hold-transition skin-black sidebar-collapse sidebar-mini">
 <?php $this->beginBody() ?>
+<div class="wrapper">
 
-<div class="wrap">
-    <?php
-    NavBar::begin([
-        'brandLabel' => Yii::$app->name,
-        'brandUrl' => Yii::$app->homeUrl,
-        'options' => [
-            'class' => 'navbar-inverse navbar-fixed-top',
-        ],
-    ]);
-    echo Nav::widget([
-        'options' => ['class' => 'navbar-nav navbar-right'],
-        'items' => [
-            ['label' => 'Home', 'url' => ['/site/index']],
-            ['label' => 'About', 'url' => ['/site/about']],
-            ['label' => 'Contact', 'url' => ['/site/contact']],
-	        Yii::$app->user->isGuest ?
-		        ['label' => 'Sign in', 'url' => ['/user/security/login']] :
-		        ['label' => 'Sign out (' . Yii::$app->user->identity->username . ')',
-		         'url' => ['/user/security/logout'],
-		         'linkOptions' => ['data-method' => 'post']],
-	        ['label' => 'Register', 'url' => ['/user/registration/register'], 'visible' => Yii::$app->user->isGuest]
-        ],
-    ]);
-    NavBar::end();
+    <?= $this->render(
+        'header.php',
+        ['directoryAsset' => $directoryAsset,'userIdentity'=>$userIdentity]
+    ) ?>
+
+    <?= $this->render(
+        'left.php',
+        ['directoryAsset' => $directoryAsset,'userIdentity'=>$userIdentity]
+    )
     ?>
 
-    <div class="container">
-        <?= Breadcrumbs::widget([
-            'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
-        ]) ?>
-        <?= Alert::widget() ?>
-        <?= $content ?>
-    </div>
+    <?= $this->render(
+        'content.php',
+        ['content' => $content, 'directoryAsset' => $directoryAsset]
+    ) ?>
+
 </div>
-
-<footer class="footer">
-    <div class="container">
-        <p class="pull-left">&copy; My Company <?= date('Y') ?></p>
-
-        <p class="pull-right"><?= Yii::powered() ?></p>
-    </div>
-</footer>
 
 <?php $this->endBody() ?>
 </body>
