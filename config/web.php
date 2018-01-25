@@ -62,6 +62,11 @@ $config = [
 		    'cost' => 12,
 		    'admins' => ['admin']
 	    ],
+	    /**
+	     * Модуль управление правами пользователей
+	     * @link https://github.com/dektrium/yii2-rbac/blob/master/docs
+	     */
+	    'rbac' => 'dektrium\rbac\RbacWebModule',
     ],
     'params' => $params,
 ];

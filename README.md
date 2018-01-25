@@ -12,7 +12,7 @@
 -------------------
 
     php yii migrate/up --migrationPath=@vendor/dektrium/yii2-user/migrations  
-
+    php yii migrate/up --migrationPath=@yii/rbac/migrations
 
 Cтруктура проекта
 -------------------
@@ -38,6 +38,7 @@ Cтруктура проекта
     MySql > ?
     
     "dektrium/yii2-user"
+    "dektrium/yii2-rbac" | composer require dektrium/yii2-rbac:1.0.0-alpha@dev
 
 
 
