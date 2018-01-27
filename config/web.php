@@ -1,94 +1,131 @@
 <?php
 
 $params = require __DIR__ . '/params.php';
-$db = require __DIR__ . '/db.php';
+$db     = require __DIR__ . '/db.php';
 
 $config = [
-    'id' => 'basic',
-    'name' => 'AsthmaCare',
-    'basePath' => dirname(__DIR__),
-    'bootstrap' => ['log'],
-    'aliases' => [
+    'id'         => 'basic',
+    'name'       => 'AsthmaCare',
+    'basePath'   => dirname(__DIR__),
+    'bootstrap'  => ['log'],
+    // set target language to be Russian
+    'language' => 'ru-RU',
+    'charset'=>'utf-8',
+    // set source language to be English
+    'sourceLanguage' => 'en-EN',
+    'aliases'    => [
         '@bower' => '@vendor/bower-asset',
         '@npm'   => '@vendor/npm-asset',
     ],
     'components' => [
-//        'view' => [
-//            'theme' => [
-//                'pathMap' => [
-//                    '@app/views' => '@vendor/dmstr/yii2-adminlte-asset/example-views/yiisoft/yii2-app'
-//                ],
-//            ],
-//        ],
-        'request' => [
+        'i18n'         => [
+            'translations' => [
+
+                '*' => [
+                    'class'          => 'yii\i18n\PhpMessageSource',
+                    //'basePath' => 'app\modules\university\message',
+                    'sourceLanguage' => 'en-EN',
+                    'fileMap'        => [
+                        'profile' => 'profile.php',
+
+                    ],
+
+                ],
+            ],
+        ],
+        'view'         => [
+            'theme' => [
+                'pathMap' => [
+                    '@dektrium/user/views' => '@app/modules/lk/views/user',
+                ],
+            ],
+        ],
+        'request'      => [
             // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
             'cookieValidationKey' => 't1Xd-e0vhaTKeFiP0Euv7W_gTZHNIKls',
         ],
-        'cache' => [
+        'cache'        => [
             'class' => 'yii\caching\FileCache',
         ],
         'errorHandler' => [
             'errorAction' => 'site/error',
         ],
-        'mailer' => [
-            'class' => 'yii\swiftmailer\Mailer',
+        'mailer'       => [
+            'class'            => 'yii\swiftmailer\Mailer',
             // send all mails to a file by default. You have to set
             // 'useFileTransport' to false and configure a transport
             // for the mailer to send real emails.
             'useFileTransport' => true,
         ],
-        'log' => [
+        'log'          => [
             'traceLevel' => YII_DEBUG ? 3 : 0,
-            'targets' => [
+            'targets'    => [
                 [
-                    'class' => 'yii\log\FileTarget',
-                    'levels' => ['error', 'warning'],
+                    'class'  => 'yii\log\FileTarget',
+                    'levels' => [
+                        'error',
+                        'warning',
+                    ],
                 ],
             ],
         ],
-        'db' => $db,
-        /*
+        'db'           => $db,
         'urlManager' => [
-            'enablePrettyUrl' => true,
+            'class' => 'yii\web\UrlManager',
+            // Disable index.php
             'showScriptName' => false,
-            'rules' => [
-            ],
+            // Disable r= routes
+            'enablePrettyUrl' => true,
+            'rules' => array(
+//                '<controller:\w+>/<id:\d+>' => '<controller>/view',
+//                '<controller:\w+>/<action:\w+>/<id:\d+>' => '<controller>/<action>',
+//                '<controller:\w+>/<action:\w+>' => '<controller>/<action>',
+//                '<module:[\wd-]+>/<controller:[\wd-]+>/<action:[\wd-]+>/<id:\d+>' => '<module>/<controller>/<action>',
+            ),
         ],
-        */
     ],
-    'modules' => [
-	    /**
-	     * Моудуль отвечающий за регистрацию и авторизацию пользователей
-	     * @link https://github.com/dektrium/yii2-user
-	     * Конфигурация
-	     * @link https://github.com/dektrium/yii2-user/blob/master/docs/configuration.md
-	     */
-	    'user' => [
-		    'class' => 'dektrium\user\Module',
-		    'enableUnconfirmedLogin' => true,
-		    'confirmWithin' => 21600,
-		    'cost' => 12,
-		    'admins' => ['admin']
-	    ],
-	    /**
-	     * Модуль управление правами пользователей
-	     * @link https://github.com/dektrium/yii2-rbac/blob/master/docs
-	     */
-	    'rbac' => 'dektrium\rbac\RbacWebModule',
+    'modules'    => [
+        /**
+         * Моудуль отвечающий за регистрацию и авторизацию пользователей
+         * @link https://github.com/dektrium/yii2-user
+         * Конфигурация
+         * @link https://github.com/dektrium/yii2-user/blob/master/docs/configuration.md
+         */
+        'user' => [
+            'class'                  => 'dektrium\user\Module',
+            'modelMap'               => [
+                'Profile' => 'app\models\Profile',
+            ],
+            'enableUnconfirmedLogin' => true,
+            'confirmWithin'          => 21600,
+            'cost'                   => 12,
+            'admins'                 => ['admin'],
+        ],
+        /**
+         * Модуль управление правами пользователей
+         * @link https://github.com/dektrium/yii2-rbac/blob/master/docs
+         */
+        'rbac' => 'dektrium\rbac\RbacWebModule',
+        'lk'   => [
+            'class' => 'app\modules\lk\lk',
+        ],
+        'api' => [
+            'class' => 'app\modules\api\api',
+        ],
     ],
-    'params' => $params,
+    'params'     => $params,
 ];
 
 if (YII_ENV_DEV) {
     // configuration adjustments for 'dev' environment
-    $config['bootstrap'][] = 'debug';
+    $config['bootstrap'][]      = 'debug';
     $config['modules']['debug'] = [
         'class' => 'yii\debug\Module',
         // uncomment the following to add your IP if you are not connecting from localhost.
         //'allowedIPs' => ['127.0.0.1', '::1'],
     ];
 
-    $config['bootstrap'][] = 'gii';
+    $config['bootstrap'][]    = 'gii';
     $config['modules']['gii'] = [
         'class' => 'yii\gii\Module',
         // uncomment the following to add your IP if you are not connecting from localhost.
