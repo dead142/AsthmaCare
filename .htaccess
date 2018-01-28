@@ -8,3 +8,11 @@ RewriteRule (.*) /web/$1
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule . /web/index.php
+
+#
+#RewriteCond %{HTTPS} !=on
+#RewriteRule ^.*$ https://%{SERVER_NAME}%{REQUEST_URI} [R,L]
+#
+## С www на без www
+#RewriteCond %{HTTP_HOST} !^asthmacare.ru [NC]
+#RewriteRule ^/?(.*)$ https://asthmacare.ru/$1 [L,R=301]

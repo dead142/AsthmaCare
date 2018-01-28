@@ -21,7 +21,10 @@
         "dektrium/yii2-user": "^0.9.13",
         "dektrium/yii2-rbac": "1.0.0-alpha@dev",
         "dmstr/yii2-adminlte-asset": "^2.1",
-        "kartik-v/yii2-widget-datepicker": "@dev"
+        "kartik-v/yii2-widget-datepicker": "@dev",
+        "kartik-v/yii2-grid": "@dev",
+        "kartik-v/yii2-widgets": "*",
+        "2amigos/yii2-chartjs-widget": "~2.0"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.0.0",
