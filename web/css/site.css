@@ -113,3 +113,12 @@ a.desc:after {
 .nav > li > form > button.logout:focus {
     outline: none;
 }
+
+#corners {
+    border-radius: 20px;
+    padding: 5px;
+    margin:  15px;
+    width: 200px;
+    opacity: 0.7;
+    filter: alpha(Opacity=70);
+}
