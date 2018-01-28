@@ -3,8 +3,8 @@
 namespace app\modules\api\controllers;
 
 use app\models\Profile;
-use yii\web\Controller;
 use dektrium\user\models\User;
+use yii\web\Controller;
 
 /**
  * Default controller for the `api` module
@@ -21,6 +21,23 @@ class DefaultController extends Controller
     }
 
     /**
+     * Это просто пиздец!
+     * с приложения приходят данные
+     * что-то ароде define true false
+     * */
+    /**
+     * fname => фамилия
+     * name => pass
+     * sname => login
+     * sex => 1992-02-22
+     * growth => 190
+     * b_date => имя
+     * login => отчество
+     * pass => пол
+     * tnumber => 855555555
+     * adress => адресс
+     * **/
+    /**
      * @url http://asthma-care/web/api/default/registration
      * @param $fname
      * @param $name
@@ -35,22 +52,24 @@ class DefaultController extends Controller
      * @throws \Exception
      * @throws \yii\base\Exception
      */
-    public function actionRegistration($fname, $name, $sname, $sex, $phone, $b_date, $growth, $login, $pass){
+    public function actionRegistration($fname , $name , $sname , $sex ,$growth , $b_date , $login , $pass = '1',
+                                       $tnumber , $adress )
+    {
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-        $user = $this->createUser($login,$pass);
-        if ($user ){
+        $user                        = $this->createUser($_REQUEST['name'] , $_REQUEST['sname'] );
 
-            $this->createProfile($fname,$name,$sname,$user,$phone,$b_date,$sex,$growth);
+        if ($user) {
+            $this->createProfile($fname,$b_date,$login,$user,$tnumber,$sex,$pass,$growth,$adress);
             return [
-                'code'=> 200,
-                'message'=> 'success',
-                'userId'=> $user->id
+                'code'    => 200,
+                'message' => 'access',
+                'id'      => $user->id,
+
             ];
         } else {
-            $this->createProfile($fname,$name,$sname,$user,$phone,$b_date,$sex,$growth);
             return [
-                'code'=> 200,
-                'message'=> $user->errors,
+                'code'    => 100,
+                'message' => 'error',
             ];
         }
 
@@ -63,7 +82,8 @@ class DefaultController extends Controller
      * @throws \Exception
      * @throws \yii\base\Exception
      */
-    public function createUser( $userName, $password) {
+    public function createUser($userName, $password)
+    {
         $model               = new User();
         $model->username     = $userName;
         $model->email        = $model->username . "@to.change";
@@ -74,20 +94,23 @@ class DefaultController extends Controller
 
 
         //set role student
-        if ( $model->save( false )){
-            $this->addRole( $model->id );
+        if ($model->save(false)) {
+            $this->addRole($model->id);
+            return $model;
         }
         return $model;
     }
+
     /**
      * Устанавливаем по-умолчанию пользоватлю роль "студент"
      * @param $id
      * @throws \Exception
      */
-    public function addRole( $id ) {
+    public function addRole($id)
+    {
         $auth = \Yii::$app->authManager;
-        $role = $auth->getRole( 'patient' );
-        $auth->assign( $role, $id );
+        $role = $auth->getRole('patient');
+        $auth->assign($role, $id);
     }
 
     /**
@@ -99,19 +122,40 @@ class DefaultController extends Controller
      * @param $birth_date
      * @param $sex
      * @param $growth
+     * @param $location
      */
-    public function createProfile( $middlename, $name, $surname, $userModel,$phone,$birth_date,$sex,$growth )
+    public function createProfile($middlename, $name, $surname, $userModel, $phone, $birth_date, $sex, $growth,
+                                  $location)
     {
-        $profile             = Profile::findOne($userModel->id);
+        $profile = Profile::findOne($userModel->id);
 
         $profile->middlename = $middlename;
         $profile->name       = $name;
         $profile->surname    = $surname;
-        $profile->phone    =   $phone;
+        $profile->phone      = $phone;
         $profile->birth_date = $birth_date;
-        $profile->sex = $sex;
-        $profile->growth = $growth;
+        $profile->sex        = $sex;
+        $profile->growth     = $growth;
+        $profile->location    = $location;
 
         $profile->save();
+    }
+
+    /**
+     * API
+     * TODO должно быть авторизация по логину и паролю, сейчас только по логину
+     * @param $login
+     * @param $pass
+     * @return array
+     */
+    public function actionAuthUser($login,$pass)
+    {
+        $model = User::find()->where(['username'=>$login])->one();
+        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+            if($model){
+                return array('code' => 200, 'message' => "ACCESS", 'result' => true, 'id' => $model->id);
+            }else {
+                return array('code' => 100, 'message' => "error", 'result' => false, 'id' => $model->id);
+            }
     }
 }
