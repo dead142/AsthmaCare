@@ -4,38 +4,40 @@ $params = require __DIR__ . '/params.php';
 $db     = require __DIR__ . '/db.php';
 
 $config = [
-    'id'         => 'basic',
-    'name'       => 'AsthmaCare',
-    'basePath'   => dirname(__DIR__),
-    'bootstrap'  => ['log'],
+    'id'             => 'basic',
+    'name'           => 'AsthmaCare',
+    'basePath'       => dirname(__DIR__),
+    'bootstrap'      => ['log'],
     // set target language to be Russian
-    'language' => 'ru-RU',
-    'charset'=>'utf-8',
+    'language'       => 'ru-RU',
+    'charset'        => 'utf-8',
     // set source language to be English
     'sourceLanguage' => 'en-EN',
-    'aliases'    => [
+    'aliases'        => [
         '@bower' => '@vendor/bower-asset',
         '@npm'   => '@vendor/npm-asset',
     ],
-    'components' => [
+    'components'     => [
+        /**
+         * Компонент интернациональзации
+         * настройка config/i18n
+         * Основной файл с переводами @app/messages/ru/app.php
+         */
         'i18n'         => [
             'translations' => [
-
                 '*' => [
                     'class'          => 'yii\i18n\PhpMessageSource',
-                    //'basePath' => 'app\modules\university\message',
                     'sourceLanguage' => 'en-EN',
-                    'fileMap'        => [
-                        'profile' => 'profile.php',
-
-                    ],
-
                 ],
             ],
         ],
+        /**
+         * Переопредение отображений
+         */
         'view'         => [
             'theme' => [
                 'pathMap' => [
+                     #переопределение моудуля dektrium/user
                     '@dektrium/user/views' => '@app/modules/lk/views/user',
                 ],
             ],
@@ -70,28 +72,28 @@ $config = [
             ],
         ],
         'db'           => $db,
-        'urlManager' => [
-            'class' => 'yii\web\UrlManager',
+        'urlManager'   => [
+            'class'           => 'yii\web\UrlManager',
             // Disable index.php
-            'showScriptName' => false,
+            'showScriptName'  => false,
             // Disable r= routes
             'enablePrettyUrl' => true,
-            'rules' => array(
-//                '<controller:\w+>/<id:\d+>' => '<controller>/view',
-//                '<controller:\w+>/<action:\w+>/<id:\d+>' => '<controller>/<action>',
-//                '<controller:\w+>/<action:\w+>' => '<controller>/<action>',
-//                '<module:[\wd-]+>/<controller:[\wd-]+>/<action:[\wd-]+>/<id:\d+>' => '<module>/<controller>/<action>',
-            ),
+            'rules'           => [
+                //                '<controller:\w+>/<id:\d+>' => '<controller>/view',
+                //                '<controller:\w+>/<action:\w+>/<id:\d+>' => '<controller>/<action>',
+                //                '<controller:\w+>/<action:\w+>' => '<controller>/<action>',
+                //                '<module:[\wd-]+>/<controller:[\wd-]+>/<action:[\wd-]+>/<id:\d+>' => '<module>/<controller>/<action>',
+            ],
         ],
     ],
-    'modules'    => [
+    'modules'        => [
         /**
          * Моудуль отвечающий за регистрацию и авторизацию пользователей
          * @link https://github.com/dektrium/yii2-user
          * Конфигурация
          * @link https://github.com/dektrium/yii2-user/blob/master/docs/configuration.md
          */
-        'user' => [
+        'user'     => [
             'class'                  => 'dektrium\user\Module',
             'modelMap'               => [
                 'Profile' => 'app\models\Profile',
@@ -100,20 +102,27 @@ $config = [
             'confirmWithin'          => 21600,
             'cost'                   => 12,
             'admins'                 => ['admin'],
+
         ],
         /**
          * Модуль управление правами пользователей
          * @link https://github.com/dektrium/yii2-rbac/blob/master/docs
          */
-        'rbac' => 'dektrium\rbac\RbacWebModule',
-        'lk'   => [
+        'rbac'     => 'dektrium\rbac\RbacWebModule',
+        'lk'       => [
             'class' => 'app\modules\lk\lk',
         ],
-        'api' => [
+        'api'      => [
             'class' => 'app\modules\api\api',
         ],
+        'admin'    => [
+            'class' => 'app\modules\admin\admin',
+        ],
+        'gridview' => [
+            'class' => '\kartik\grid\Module',
+        ],
     ],
-    'params'     => $params,
+    'params'         => $params,
 ];
 
 if (YII_ENV_DEV) {
