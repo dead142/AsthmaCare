@@ -1,4 +1,4 @@
-<aside class="main-sidebar">
+<aside class="main-sidebar " >
 
     <section class="sidebar">
 
@@ -32,13 +32,25 @@
             [
                 'options' => ['class' => 'sidebar-menu tree', 'data-widget'=> 'tree'],
                 'items' => [
-                    ['label' => 'Menu Yii2', 'options' => ['class' => 'header']],
-                    ['label' => 'Добавить данные', 'icon' => 'plus', 'url' => ['/gii'],'visible' =>
+                    ['label' => 'Действия пользователя', 'options' => ['class' => 'header']],
+                    ['label' => 'Добавить данные', 'icon' => 'plus', 'url' => ['/lk/examination/create'],'visible' =>
                         Yii::$app->user->can('patient')],
-                    ['label' => 'График исследований', 'icon' => 'area-chart', 'url' => ['/gii'],'visible' =>
+                    ['label' => 'График исследований', 'icon' => 'area-chart', 'url' => ['/lk/default/graph'],'visible' =>
                         Yii::$app->user->can('patient')],
-                    ['label' => 'Таблица исследований', 'icon' => 'table', 'url' => ['/debug'],'visible' =>
+                    ['label' => 'Таблица исследований', 'icon' => 'table', 'url' => ['/lk/examination/index'],
+                    'visible' =>
                         Yii::$app->user->can('patient')],
+
+                    #ДЛЯ ДОКТОРА
+                    ['label' => 'Доктор', 'options' => ['class' => 'header'],'visible' =>
+                        Yii::$app->user->can('doctor')],
+                    ['label' => 'Таблица исследований', 'icon' => 'table', 'url' => ['/admin/examination/index'],'visible' =>
+                            Yii::$app->user->can('doctor')],
+                    #ДЛЯ АДМИНА
+                    ['label' => 'Администратор', 'options' => ['class' => 'header'],'visible' =>
+                        Yii::$app->user->can('admin')],
+                    ['label' => 'Управление пользователями', 'icon' => 'users', 'url' => ['/user/admin'],'visible' =>
+                        Yii::$app->user->can('admin')],
                     Yii::$app->user->isGuest ?
                         ['label' => 'Sign in', 'url' => ['/user/security/login']] :
                         ['label' => 'Sign out (' . Yii::$app->user->identity->username . ')',

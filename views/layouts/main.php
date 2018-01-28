@@ -9,13 +9,18 @@ use app\widgets\Alert;
 use yii\helpers\Html;
 use yii\widgets\Breadcrumbs;
 
+// TODO delete
+$directoryAsset = null;
+
 AppAsset::register($this);
 ?>
 
 <?
+$userIdentity = null;
 if (\Yii::$app->user->identity){
     $userIdentity =  \Yii::$app->user->identity;
 }
+
  ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
@@ -28,6 +33,7 @@ if (\Yii::$app->user->identity){
           href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
     <?= Html::csrfMetaTags() ?>
     <title><?= Html::encode($this->title) ?></title>
+    <? $this->registerCssFile('/web/css/site.css'); ?>
     <?php $this->head() ?>
 </head>
 <body class="hold-transition skin-black sidebar-collapse sidebar-mini">
