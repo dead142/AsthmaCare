@@ -17,4 +17,12 @@ class DefaultController extends Controller
     {
         return $this->render('index');
     }
+
+    /**
+     * Отображает график
+     * @return string
+     */
+    public function actionGraph(){
+        return $this->render('graph.php');
+    }
 }
